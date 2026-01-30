@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista Dinâmica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Para PWA simples -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
 
     <style>
         body {
@@ -11,7 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
         }
 
@@ -19,18 +23,21 @@
             background: #fff;
             padding: 25px;
             border-radius: 8px;
-            width: 350px;
+            width: 90%;
+            max-width: 400px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5em;
         }
 
         .input-group {
             display: flex;
             gap: 10px;
+            margin-bottom: 10px;
         }
 
         input {
@@ -38,7 +45,7 @@
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         button {
@@ -49,6 +56,7 @@
             color: #fff;
             cursor: pointer;
             font-size: 14px;
+            flex-shrink: 0;
         }
 
         button:hover {
@@ -58,7 +66,7 @@
         ul {
             list-style: none;
             padding: 0;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         li {
@@ -66,9 +74,10 @@
             justify-content: space-between;
             align-items: center;
             background: #f1f1f1;
-            padding: 8px 10px;
+            padding: 10px;
             border-radius: 5px;
             margin-bottom: 8px;
+            word-break: break-word;
         }
 
         li button {
@@ -80,9 +89,24 @@
         li button:hover {
             background: #b02a37;
         }
+
+        /* Responsividade para celulares */
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.2em;
+            }
+
+            input {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
     </style>
 </head>
-
 <body>
 
     <div class="container">
@@ -101,6 +125,10 @@
         const button = document.getElementById("addButton");
         const list = document.getElementById("itemList");
 
+        // Recupera lista do localStorage ao carregar a página
+        let itens = JSON.parse(localStorage.getItem("listaItens")) || [];
+        renderLista();
+
         button.addEventListener("click", adicionarItem);
 
         // Adicionar item ao pressionar Enter
@@ -112,24 +140,39 @@
 
         function adicionarItem() {
             const texto = input.value.trim();
-
             if (texto === "") return;
 
-            const li = document.createElement("li");
-            li.textContent = texto;
-
-            const removerBtn = document.createElement("button");
-            removerBtn.textContent = "Remover";
-
-            removerBtn.addEventListener("click", () => {
-                list.removeChild(li);
-            });
-
-            li.appendChild(removerBtn);
-            list.appendChild(li);
+            itens.push(texto);
+            salvarLista();
+            renderLista();
 
             input.value = "";
             input.focus();
+        }
+
+        function removerItem(index) {
+            itens.splice(index, 1);
+            salvarLista();
+            renderLista();
+        }
+
+        function salvarLista() {
+            localStorage.setItem("listaItens", JSON.stringify(itens));
+        }
+
+        function renderLista() {
+            list.innerHTML = "";
+            itens.forEach((item, index) => {
+                const li = document.createElement("li");
+                li.textContent = item;
+
+                const removerBtn = document.createElement("button");
+                removerBtn.textContent = "Remover";
+                removerBtn.addEventListener("click", () => removerItem(index));
+
+                li.appendChild(removerBtn);
+                list.appendChild(li);
+            });
         }
     </script>
 
