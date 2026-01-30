@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Dinâmica</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            width: 350px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f1f1;
+            padding: 8px 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+
+        li button {
+            background: #dc3545;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        li button:hover {
+            background: #b02a37;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Lista de Itens</h1>
+
+        <div class="input-group">
+            <input type="text" id="itemInput" placeholder="Digite um item">
+            <button id="addButton">Adicionar</button>
+        </div>
+
+        <ul id="itemList"></ul>
+    </div>
+
+    <script>
+        const input = document.getElementById("itemInput");
+        const button = document.getElementById("addButton");
+        const list = document.getElementById("itemList");
+
+        button.addEventListener("click", adicionarItem);
+
+        // Adicionar item ao pressionar Enter
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                adicionarItem();
+            }
+        });
+
+        function adicionarItem() {
+            const texto = input.value.trim();
+
+            if (texto === "") return;
+
+            const li = document.createElement("li");
+            li.textContent = texto;
+
+            const removerBtn = document.createElement("button");
+            removerBtn.textContent = "Remover";
+
+            removerBtn.addEventListener("click", () => {
+                list.removeChild(li);
+            });
+
+            li.appendChild(removerBtn);
+            list.appendChild(li);
+
+            input.value = "";
+            input.focus();
+        }
+    </script>
+
+</body>
+</html>
